@@ -27,8 +27,8 @@ from langsmith import Client as LangsmithClient
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from agents import DEFAULT_AGENT, AgentGraph, get_agent, get_all_agent_info
-# TODO: import your agent initialization
-# TODO: import your section templates
+from agents.fit_buddy.agent import initialize_fit_buddy_state
+from agents.fit_buddy.prompts import SECTION_TEMPLATES as FIT_BUDDY_TEMPLATES
 from core import settings
 from core.settings import DatabaseType
 # Removed: # DentApp (removed) integration
@@ -469,7 +469,7 @@ async def invoke(user_input: UserInput, agent_id: str = DEFAULT_AGENT) -> Invoke
             section_state = state.values.get("section_states", {}).get(current_section_id)
             # Choose the right section templates based on agent_id
             if agent_id == "fit_buddy":
-                section_templates = FOUNDER_BUDDY_TEMPLATES
+                section_templates = FIT_BUDDY_TEMPLATES
             else:
                 raise ValueError(f"Unknown agent: {agent_id}")
             
@@ -783,7 +783,7 @@ async def message_generator(
                 elif agent_id == "concept-pitch":
                     section_templates = CONCEPT_PITCH_TEMPLATES
                 elif agent_id == "fit_buddy":
-                    section_templates = FOUNDER_BUDDY_TEMPLATES
+                    section_templates = FIT_BUDDY_TEMPLATES
                 else:  # default to value_canvas
                     section_templates = VALUE_CANVAS_TEMPLATES
                 
@@ -954,7 +954,7 @@ async def notify_section_update(
     
     # Choose the right section templates based on agent_id
     if agent_id == "fit_buddy":
-        section_templates = FOUNDER_BUDDY_TEMPLATES
+        section_templates = FIT_BUDDY_TEMPLATES
     else:
         raise ValueError(f"Unknown agent: {agent_id}")
     
