@@ -18,10 +18,10 @@ interface ProgressSidebarProps {
 
 // Define all sections for fit_buddy
 const FOUNDER_BUDDY_SECTIONS = [
-  { id: 'mission', name: 'Mission', displayName: 'Mission' },
-  { id: 'idea', name: 'Idea', displayName: 'Idea' },
-  { id: 'team_traction', name: 'Team & Traction', displayName: 'Team & Traction' },
-  { id: 'invest_plan', name: 'Investment Plan', displayName: 'Investment Plan' }
+  { id: 'diet_habits', name: 'Diet Habits', displayName: 'Diet Habits' },
+  { id: 'exercise_habits', name: 'Exercise Habits', displayName: 'Exercise Habits' },
+  { id: 'body_metrics', name: 'Body Metrics', displayName: 'Body Metrics' },
+  { id: 'advice', name: 'Advice', displayName: 'Advice' }
 ];
 
 export default function ProgressSidebar({ 

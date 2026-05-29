@@ -50,10 +50,10 @@ const SECTION_DISPLAY_NAMES: Record<number | string, string> = {
   9003: 'Pitch Selection',
   9004: 'Refinement',
   // fit_buddy sections
-  'mission': 'Mission',
-  'idea': 'Idea',
-  'team_traction': 'Team & Traction',
-  'invest_plan': 'Investment Plan',
+  'diet_habits': 'Diet Habits',
+  'exercise_habits': 'Exercise Habits',
+  'body_metrics': 'Body Metrics',
+  'advice': 'Advice',
 };
 
 const REFINE_STYLES: Record<string, string> = {

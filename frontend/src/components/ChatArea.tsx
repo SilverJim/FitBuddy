@@ -141,7 +141,7 @@ export default function ChatArea({
 
   const getPlaceholderText = (agentId: string) => {
     const placeholders: Record<string, string> = {
-      'fit_buddy': 'Try: "I want to validate my startup idea"'
+      'fit_buddy': 'Try: "I want to validate my startup exercise_habits"'
     };
     return placeholders[agentId] || 'Type your message...';
   };
@@ -436,7 +436,7 @@ export default function ChatArea({
                color: '#64748b',
                margin: '4px 0 0 0'
              }}>
-               {selectedAgent === 'fit_buddy' && 'Validate and refine your startup idea'}
+               {selectedAgent === 'fit_buddy' && 'Validate and refine your startup exercise_habits'}
              </p>
            )}
          </div>

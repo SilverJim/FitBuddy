@@ -65,7 +65,7 @@ export default function ConfigPanel({
       console.error('Failed to fetch agents:', error);
       // Fallback - only fit_buddy
       setAgents([
-        { id: 'fit_buddy', name: 'fit_buddy', description: 'Validate and refine your startup idea' }
+        { id: 'fit_buddy', name: 'fit_buddy', description: 'Validate and refine your startup exercise_habits' }
       ]);
       
       // Auto-select fit_buddy if not already selected

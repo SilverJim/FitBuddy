@@ -1061,7 +1061,7 @@ async def check_agent_state(
         agent_id: Agent identifier (e.g., "fit_buddy")
         user_id: User identifier
         thread_id: Thread/conversation identifier
-        section_id: Optional section ID to check (e.g., "mission", "idea")
+        section_id: Optional section ID to check (e.g., "diet_habits", "exercise_habits")
                     If not provided, checks all sections
     
     Returns:

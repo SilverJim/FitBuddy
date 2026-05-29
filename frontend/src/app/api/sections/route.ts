@@ -74,10 +74,10 @@ const getSupabaseClient = () => {
 
 // fit_buddy section mapping (string ID to display info)
 const FOUNDER_BUDDY_SECTIONS: Record<string, { name: string; displayName: string }> = {
-  'mission': { name: 'Mission', displayName: 'Mission' },
-  'idea': { name: 'Idea', displayName: 'Idea' },
-  'team_traction': { name: 'Team & Traction', displayName: 'Team & Traction' },
-  'invest_plan': { name: 'Investment Plan', displayName: 'Investment Plan' },
+  'diet_habits': { name: 'Diet Habits', displayName: 'Diet Habits' },
+  'exercise_habits': { name: 'Exercise Habits', displayName: 'Exercise Habits' },
+  'body_metrics': { name: 'Body Metrics', displayName: 'Body Metrics' },
+  'advice': { name: 'Advice', displayName: 'Advice' },
 };
 
 export async function POST(req: NextRequest) {

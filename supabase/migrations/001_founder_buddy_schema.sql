@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS section_states (
     user_id INTEGER NOT NULL,
     thread_id TEXT NOT NULL,
     agent_id TEXT NOT NULL DEFAULT 'founder-buddy',
-    section_id TEXT NOT NULL, -- 'mission', 'idea', 'team_traction', 'invest_plan'
+    section_id TEXT NOT NULL, -- 'diet_habits', 'exercise_habits', 'body_metrics', 'advice'
     content JSONB NOT NULL, -- Tiptap JSON format
     plain_text TEXT,
     status TEXT NOT NULL DEFAULT 'pending', -- 'pending', 'in_progress', 'done'

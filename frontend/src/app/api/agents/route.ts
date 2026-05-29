@@ -12,7 +12,7 @@ export async function GET() {
         agents: [
           {
             key: 'fit_buddy',
-            description: 'A fit_buddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about mission, idea, team traction, and investment plan'
+            description: 'A fit_buddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about diet_habits, exercise_habits, body_metrics, and advice'
           }
         ]
       };
@@ -56,7 +56,7 @@ export async function GET() {
       agents: [
         {
           key: 'fit_buddy',
-          description: 'A fit_buddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about mission, idea, team traction, and investment plan'
+          description: 'A fit_buddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about diet_habits, exercise_habits, body_metrics, and advice'
         }
       ]
     };
