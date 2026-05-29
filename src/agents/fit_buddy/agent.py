@@ -1,5 +1,5 @@
-"""XBuddy Agent — compiled graph instance."""
+"""FitBuddy Agent — compiled graph instance."""
 
-from .graph.builder import build_xbuddy_graph
+from .graph.builder import build_fitbuddy_graph
 
-graph = build_xbuddy_graph()
+graph = build_fitbuddy_graph()

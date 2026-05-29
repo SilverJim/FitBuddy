@@ -1,4 +1,4 @@
-"""Node implementations for XBuddy Agent."""
+"""Node implementations for fit_buddy Agent."""
 
 from .initialize import initialize_node
 from .router import router_node

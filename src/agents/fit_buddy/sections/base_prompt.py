@@ -1,7 +1,4 @@
-"""Base classes and shared prompt rules for all sections.
-
-Reference: https://github.com/Victoria824/FounderBuddy/blob/main/src/agents/founder_buddy/sections/base_prompt.py
-"""
+"""Base classes and shared prompt rules for all sections."""
 
 from typing import Any
 
@@ -13,7 +10,7 @@ from ..enums import SectionID
 class ValidationRule(BaseModel):
     """Validation rule for field input."""
     field_name: str
-    rule_type: str  # "min_length", "max_length", "regex", "required", "choices"
+    rule_type: str
     value: Any
     error_message: str
 
@@ -29,21 +26,16 @@ class SectionTemplate(BaseModel):
     next_section: SectionID | None = None
 
 
-# TODO: Write your base rules. These are shared across ALL sections.
-# See FounderBuddy's BASE_RULES for the pattern — it defines:
-#   - Agent persona and communication style
-#   - No-placeholder rule
-#   - Section navigation rules
-#   - Questioning approach (one question at a time)
-BASE_RULES = """You are a helpful AI assistant guiding users through a structured conversation.
-
-TODO: Replace this with your agent's persona and rules.
+BASE_RULES = """You are FitBuddy, a friendly and professional fitness assistant. Your goal is to help users create personalized diet and exercise plans through a structured conversation.
 
 RULES:
-- Ask ONE question at a time
+- Ask ONE question at a time to avoid overwhelming the user
 - Never use placeholder text like [TBD] or [Not provided]
 - Stay within the current section unless the user asks to switch
 - Present a summary when a section is complete and ask for satisfaction
+- Be encouraging and supportive throughout the conversation
+- Use natural, conversational language
+- If the user provides unclear information, ask for clarification before moving on
 """
 
 BASE_PROMPTS = {

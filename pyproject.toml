@@ -1,9 +1,9 @@
 [project]
-name = "xbuddy"
+name = "agent-service-toolkit"
 version = "0.1.0"
-description = "AI Agent Residency — build your own XBuddy with LangGraph + FastAPI"
+description = "AI agent service built with LangGraph and FastAPI"
 readme = "README.md"
-authors = []
+authors = [{ name = "Jianhaotian" }]
 classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: MIT License",

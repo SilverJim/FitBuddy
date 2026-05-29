@@ -1,17 +1,10 @@
-"""Graph builder for your XBuddy Agent.
-
-This is the core of your LangGraph agent. It wires together all the nodes
-into a StateGraph with conditional edges.
-
-Study FounderBuddy's builder.py:
-https://github.com/Victoria824/FounderBuddy/blob/main/src/agents/founder_buddy/graph/builder.py
-"""
+"""Graph builder for FitBuddy Agent."""
 
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.constants import END, START
 from langgraph.graph import StateGraph
 
-from ..models import XBuddyState
+from ..models import FitBuddyState
 from ..nodes import (
     implementation_node,
     generate_decision_node,
@@ -23,8 +16,8 @@ from ..nodes import (
 from .routes import route_after_memory_updater, route_decision
 
 
-def build_xbuddy_graph():
-    """Build the XBuddy agent graph.
+def build_fitbuddy_graph():
+    """Build the FitBuddy agent graph.
 
     Graph flow:
         START -> initialize -> router -> generate_reply -> generate_decision
@@ -33,9 +26,8 @@ def build_xbuddy_graph():
                                         |
                                 implementation -> END
     """
-    graph = StateGraph(XBuddyState)
+    graph = StateGraph(FitBuddyState)
 
-    # Add nodes
     graph.add_node("initialize", initialize_node)
     graph.add_node("router", router_node)
     graph.add_node("generate_reply", generate_reply_node)
@@ -43,7 +35,6 @@ def build_xbuddy_graph():
     graph.add_node("memory_updater", memory_updater_node)
     graph.add_node("implementation", implementation_node)
 
-    # Add edges
     graph.add_edge(START, "initialize")
     graph.add_edge("initialize", "router")
 
@@ -70,6 +61,5 @@ def build_xbuddy_graph():
 
     graph.add_edge("implementation", END)
 
-    # Compile with memory checkpointer
     memory = MemorySaver()
     return graph.compile(checkpointer=memory)

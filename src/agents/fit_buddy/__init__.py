@@ -1,1 +1,1 @@
-"""XBuddy Agent package."""
+"""FitBuddy Agent package."""

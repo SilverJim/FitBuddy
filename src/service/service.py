@@ -233,7 +233,7 @@ app = FastAPI(lifespan=lifespan)
 # Add CORS middleware to allow frontend requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins like ["https://xbuddy.vercel.app"]
+    allow_origins=["*"],  # In production, replace with specific origins like ["https://fit_buddy.vercel.app"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -260,25 +260,25 @@ async def info() -> ServiceMetadata:
                 method="POST",
                 description="Sync LangGraph state with manually edited section content from database. Uses LLM to extract structured data from Tiptap text and updates agent state. Common section IDs: 45=interview, 46=icp, 48=pain, 49=deep_fear, 50=payoffs, 52=signature_method, 53=mistakes, 54=prize.",
                 parameters={
-                    "agent_id": "Agent identifier (currently only 'xbuddy' supported)",
+                    "agent_id": "Agent identifier (currently only 'fit_buddy' supported)",
                     "section_id": "Section ID integer from database (e.g., 48 for pain, 46 for icp, 45 for interview)",
                     "user_id": "User identifier (required query parameter)",
                     "thread_id": "Thread/conversation identifier (required query parameter)"
                 },
-                example="/sync_section/xbuddy/48?user_id=12&thread_id=3ab280c6-44ee-416d-87f9-73aad616c8ec"
+                example="/sync_section/fit_buddy/48?user_id=12&thread_id=3ab280c6-44ee-416d-87f9-73aad616c8ec"
             ),
             EndpointInfo(
                 path="/refine_section/{agent_id}/{section_id}",
                 method="POST",
                 description="Refine section content using AI. Accepts JSON body with user_id, thread_id, and refinement_prompt. Returns refined content (plain text + Tiptap format). Does NOT save to database. Common section IDs: 45=interview, 46=icp, 48=pain, 49=deep_fear, 50=payoffs, 52=signature_method, 53=mistakes, 54=prize.",
                 parameters={
-                    "agent_id": "Agent identifier - path parameter (currently only 'xbuddy' supported)",
+                    "agent_id": "Agent identifier - path parameter (currently only 'fit_buddy' supported)",
                     "section_id": "Section ID integer from database - path parameter (e.g., 48 for pain, 46 for icp, 45 for interview)",
                     "body.user_id": "User identifier (integer, required in JSON body)",
                     "body.thread_id": "Thread/conversation identifier (string, required in JSON body)",
                     "body.refinement_prompt": "User's refinement instruction (string, can be long text, required in JSON body)"
                 },
-                example='curl -X POST http://localhost:8080/refine_section/xbuddy/48 -H "Content-Type: application/json" -d \'{"user_id": 12, "thread_id": "3ab280c6-44ee-416d-87f9-73aad616c8ec", "refinement_prompt": "Make it more concise"}\''
+                example='curl -X POST http://localhost:8080/refine_section/fit_buddy/48 -H "Content-Type: application/json" -d \'{"user_id": 12, "thread_id": "3ab280c6-44ee-416d-87f9-73aad616c8ec", "refinement_prompt": "Make it more concise"}\''
             ),
         ]
     )
@@ -301,8 +301,8 @@ async def _handle_input(user_input: UserInput, agent: AgentGraph, agent_id: str)
     initial_state = None
     if not thread_id:
         # This is a new conversation, so we need to initialize a new state
-        if agent_id == "xbuddy":
-            initial_state = await initialize_xbuddy_state(user_id=user_id)
+        if agent_id == "fit_buddy":
+            initial_state = await initialize_fit_buddy_state(user_id=user_id)
         else:
             raise ValueError(f"Unknown agent: {agent_id}")
 
@@ -468,7 +468,7 @@ async def invoke(user_input: UserInput, agent_id: str = DEFAULT_AGENT) -> Invoke
             current_section_id = current_section_enum.value  # Use the string value
             section_state = state.values.get("section_states", {}).get(current_section_id)
             # Choose the right section templates based on agent_id
-            if agent_id == "xbuddy":
+            if agent_id == "fit_buddy":
                 section_templates = FOUNDER_BUDDY_TEMPLATES
             else:
                 raise ValueError(f"Unknown agent: {agent_id}")
@@ -782,7 +782,7 @@ async def message_generator(
                     section_templates = SPECIAL_REPORT_TEMPLATES
                 elif agent_id == "concept-pitch":
                     section_templates = CONCEPT_PITCH_TEMPLATES
-                elif agent_id == "xbuddy":
+                elif agent_id == "fit_buddy":
                     section_templates = FOUNDER_BUDDY_TEMPLATES
                 else:  # default to value_canvas
                     section_templates = VALUE_CANVAS_TEMPLATES
@@ -933,7 +933,7 @@ async def notify_section_update(
     - Returns an AI prompt (single message) and the latest section status/draft
 
     Args:
-        agent_id: Agent identifier (e.g., "xbuddy")
+        agent_id: Agent identifier (e.g., "fit_buddy")
         section_id: Section ID integer from database (e.g., 48 for pain, 46 for icp)
         user_id: User identifier
         thread_id: Thread/conversation identifier (required)
@@ -953,7 +953,7 @@ async def notify_section_update(
         raise HTTPException(status_code=422, detail="Missing required parameter: thread_id")
     
     # Choose the right section templates based on agent_id
-    if agent_id == "xbuddy":
+    if agent_id == "fit_buddy":
         section_templates = FOUNDER_BUDDY_TEMPLATES
     else:
         raise ValueError(f"Unknown agent: {agent_id}")
@@ -1012,7 +1012,7 @@ async def sync_section(
     and we need to sync the structured state with their changes.
 
     Args:
-        agent_id: Agent identifier (e.g., "xbuddy")
+        agent_id: Agent identifier (e.g., "fit_buddy")
         section_id: Section ID integer from database (e.g., 48 for pain, 46 for icp)
         user_id: User identifier
         thread_id: Thread/conversation identifier
@@ -1034,10 +1034,10 @@ async def sync_section(
     if not thread_id:
         raise HTTPException(status_code=422, detail="Missing required parameter: thread_id")
 
-    # Sync is not supported for xbuddy agent
+    # Sync is not supported for fit_buddy agent
     raise HTTPException(
         status_code=422,
-        detail=f"Sync not supported for agent: {agent_id}. This feature is not available for xbuddy."
+        detail=f"Sync not supported for agent: {agent_id}. This feature is not available for fit_buddy."
     )
 
 
@@ -1058,7 +1058,7 @@ async def check_agent_state(
     Returns a comparison showing if they match.
     
     Args:
-        agent_id: Agent identifier (e.g., "xbuddy")
+        agent_id: Agent identifier (e.g., "fit_buddy")
         user_id: User identifier
         thread_id: Thread/conversation identifier
         section_id: Optional section ID to check (e.g., "mission", "idea")
@@ -1372,7 +1372,7 @@ async def get_agent_state(
     - Any other state data
     
     Args:
-        agent_id: Agent identifier (e.g., "xbuddy")
+        agent_id: Agent identifier (e.g., "fit_buddy")
         user_id: User identifier
         thread_id: Thread/conversation identifier
     
@@ -1530,7 +1530,7 @@ async def refine_section(
     4. If user accepts, frontend saves to # DentApp (removed) API and calls /sync_section
 
     Args:
-        agent_id: Agent identifier (e.g., "xbuddy") - path parameter
+        agent_id: Agent identifier (e.g., "fit_buddy") - path parameter
         section_id: Section ID integer from database (e.g., 48 for pain, 46 for icp) - path parameter
         request: Request body containing user_id, thread_id, and refinement_prompt
 
@@ -1557,10 +1557,10 @@ async def refine_section(
     if not refinement_prompt.strip():
         raise HTTPException(status_code=422, detail="refinement_prompt cannot be empty or whitespace only")
 
-    # Refine is not supported for xbuddy agent
+    # Refine is not supported for fit_buddy agent
     raise HTTPException(
         status_code=422,
-        detail=f"Refine not supported for agent: {agent_id}. This feature is not available for xbuddy."
+        detail=f"Refine not supported for agent: {agent_id}. This feature is not available for fit_buddy."
     )
 
     # Execute refinement
@@ -1612,7 +1612,7 @@ async def subscribe_to_realtime(
     request: Request,
     user_id: int | None = None,
     thread_id: str | None = None,
-    agent_id: str = "xbuddy",
+    agent_id: str = "fit_buddy",
 ):
     """
     Manually subscribe to Realtime events for a specific thread.
@@ -1625,7 +1625,7 @@ async def subscribe_to_realtime(
     Args:
         user_id: User identifier
         thread_id: Thread/conversation identifier
-        agent_id: Agent identifier (default: "xbuddy")
+        agent_id: Agent identifier (default: "fit_buddy")
         request: FastAPI Request object (for accessing app.state)
     
     Returns:
@@ -1703,10 +1703,10 @@ async def get_business_plan(
     request: Request,
 ):
     """
-    Get business plan from database for xbuddy agent.
+    Get business plan from database for fit_buddy agent.
     
     Args:
-        agent_id: Agent identifier (must be "xbuddy")
+        agent_id: Agent identifier (must be "fit_buddy")
         user_id: User identifier
         thread_id: Thread/conversation identifier
         request: FastAPI Request object (for accessing app.state)
@@ -1714,10 +1714,10 @@ async def get_business_plan(
     Returns:
         Business plan document from database
     """
-    if agent_id != "xbuddy":
+    if agent_id != "fit_buddy":
         raise HTTPException(
             status_code=422,
-            detail=f"Business plan retrieval only supported for 'xbuddy' agent"
+            detail=f"Business plan retrieval only supported for 'fit_buddy' agent"
         )
     
     logger.info(f"=== GET_BUSINESS_PLAN_REQUEST: agent_id={agent_id} ===")
@@ -1795,22 +1795,22 @@ async def generate_business_plan(
     thread_id: str,
 ):
     """
-    Manually trigger business plan generation for xbuddy agent.
+    Manually trigger business plan generation for fit_buddy agent.
     
     This endpoint generates a comprehensive business plan based on all collected conversation data.
     
     Args:
-        agent_id: Agent identifier (must be "xbuddy")
+        agent_id: Agent identifier (must be "fit_buddy")
         user_id: User identifier
         thread_id: Thread/conversation identifier
     
     Returns:
         Business plan document in markdown format
     """
-    if agent_id != "xbuddy":
+    if agent_id != "fit_buddy":
         raise HTTPException(
             status_code=422,
-            detail=f"Business plan generation only supported for 'xbuddy' agent"
+            detail=f"Business plan generation only supported for 'fit_buddy' agent"
         )
     
     logger.info(f"=== GENERATE_BUSINESS_PLAN_REQUEST: agent_id={agent_id} ===")
@@ -1834,7 +1834,7 @@ async def generate_business_plan(
             }
         
         # Import and call generate_business_plan_node
-        from agents.xbuddy.nodes.generate_business_plan import generate_business_plan_node
+        from agents.fit_buddy.nodes.generate_business_plan import generate_business_plan_node
         
         # Create a temporary state dict for the node
         temp_state = dict(state_values)

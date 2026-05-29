@@ -1,8 +1,4 @@
-"""Pydantic models for your XBuddy Agent.
-
-Study FounderBuddy's models.py to understand how these work:
-https://github.com/Victoria824/FounderBuddy/blob/main/src/agents/founder_buddy/models.py
-"""
+"""Pydantic models for FitBuddy Agent."""
 
 import uuid
 from typing import Any
@@ -16,16 +12,16 @@ from .sections.base_prompt import SectionTemplate, ValidationRule
 
 
 class SectionContent(BaseModel):
-    """Content for an agent section."""
-    content: dict[str, Any]  # Rich text content (Tiptap JSON format)
-    plain_text: str | None = None  # Plain text version for LLM processing
+    """Content for a FitBuddy section."""
+    content: dict[str, Any]
+    plain_text: str | None = None
 
 
 class SectionState(BaseModel):
     """State of a single section."""
     section_id: SectionID
     content: SectionContent | None = None
-    satisfaction_status: str | None = None  # satisfied, needs_improvement, or None
+    satisfaction_status: str | None = None
     status: SectionStatus = SectionStatus.PENDING
 
 
@@ -38,17 +34,32 @@ class ContextPacket(BaseModel):
     validation_rules: dict[str, Any] | None = None
 
 
-class XBuddyData(BaseModel):
-    """Domain-specific data collected from the user.
+class FitBuddyData(BaseModel):
+    """Domain-specific data collected from the user."""
+    # Diet habits section
+    daily_meals: list[str] = Field(default_factory=list)
+    dietary_preferences: str | None = None
+    food_restrictions: list[str] = Field(default_factory=list)
+    water_intake: str | None = None
+    snack_habits: str | None = None
 
-    TODO: Replace these fields with data relevant to your domain.
-    For example, StudentBuddy might have:
-      learning_goals: list[str]
-      current_level: str
-      available_hours_per_week: int
-      preferred_subjects: list[str]
-    """
-    pass
+    # Exercise habits section
+    exercise_frequency: str | None = None
+    exercise_types: list[str] = Field(default_factory=list)
+    exercise_duration: str | None = None
+    exercise_intensity: str | None = None
+    fitness_level: str | None = None
+
+    # Body metrics section
+    weight: float | None = None
+    height: float | None = None
+    age: int | None = None
+    gender: str | None = None
+    bmi: float | None = None
+
+    # Advice section
+    diet_advice: str | None = None
+    exercise_advice: str | None = None
 
 
 class ChatAgentDecision(BaseModel):
@@ -93,38 +104,27 @@ class ChatAgentOutput(BaseModel):
         return v
 
 
-class XBuddyState(MessagesState):
-    """State for your XBuddy agent.
-
-    Extends MessagesState (which provides `messages: list[BaseMessage]`).
-    Study FounderBuddyState to understand each field's role in the graph.
-    """
-    # User and conversation identification
+class FitBuddyState(MessagesState):
+    """State for the FitBuddy agent."""
     user_id: int = 1
     thread_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
 
-    # Navigation and progress
-    current_section: SectionID = SectionID.SECTION_1
+    current_section: SectionID = SectionID.DIET_HABITS
     context_packet: ContextPacket | None = None
     section_states: dict[str, SectionState] = Field(default_factory=dict)
     router_directive: str = RouterDirective.NEXT
     finished: bool = False
 
-    # Domain-specific data — TODO: customize XBuddyData above
-    user_data: XBuddyData = Field(default_factory=XBuddyData)
+    user_data: FitBuddyData = Field(default_factory=FitBuddyData)
 
-    # Memory management
     short_memory: list[BaseMessage] = Field(default_factory=list)
 
-    # Agent output
     agent_output: ChatAgentOutput | None = None
     awaiting_user_input: bool = False
     awaiting_satisfaction_feedback: bool = False
 
-    # Error tracking
     error_count: int = 0
     last_error: str | None = None
 
-    # Final output — TODO: rename to match your domain
-    final_output: str | None = None
+    final_advice: str | None = None
     should_generate_final_output: bool = False

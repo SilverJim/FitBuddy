@@ -11,8 +11,8 @@ export async function GET() {
       const fallbackAgents = {
         agents: [
           {
-            key: 'xbuddy',
-            description: 'A XBuddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about mission, idea, team traction, and investment plan'
+            key: 'fit_buddy',
+            description: 'A fit_buddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about mission, idea, team traction, and investment plan'
           }
         ]
       };
@@ -42,21 +42,21 @@ export async function GET() {
 
     const data = await response.json();
     
-    // Filter to only return xbuddy agent
+    // Filter to only return fit_buddy agent
     if (data.agents && Array.isArray(data.agents)) {
-      data.agents = data.agents.filter((agent: { key: string }) => agent.key === 'xbuddy');
+      data.agents = data.agents.filter((agent: { key: string }) => agent.key === 'fit_buddy');
     }
     
     return Response.json(data);
   } catch (error) {
     console.error('Failed to fetch agents:', error);
     
-    // Fallback - only xbuddy agent
+    // Fallback - only fit_buddy agent
     const fallbackAgents = {
       agents: [
         {
-          key: 'xbuddy',
-          description: 'A XBuddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about mission, idea, team traction, and investment plan'
+          key: 'fit_buddy',
+          description: 'A fit_buddy agent that helps entrepreneurs validate and refine their startup ideas through structured conversations about mission, idea, team traction, and investment plan'
         }
       ]
     };
